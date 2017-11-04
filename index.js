@@ -10,6 +10,11 @@ let paletColors = ['black','white','green','blue','red','yellow'];
 //set number of rows and columns in canvas
 let gridSize = 10;
 
+//set paint brush mode off and add toggle off listener to whole page
+let brushMode = false;
+let body = document.getElementsByTagName('body')[0];
+body.addEventListener('mouseup', brushOff);
+
 /*
   create canvas
 */
@@ -28,6 +33,8 @@ function makePixle(color) {
   pixle.style.backgroundColor = color;
   pixle.style.border = '1px solid grey';
   pixle.addEventListener('click', applyColor);
+  pixle.addEventListener('mousedown', brushOn);
+  pixle.addEventListener('mouseenter', brushColor);
   return pixle;
 }
 
@@ -65,4 +72,23 @@ function applyColor() {
 function setColor() {
   selectedColor = event.target.style.backgroundColor;
   indicator.style.backgroundColor = selectedColor;
+}
+
+//toggle paint brush mode on
+function brushOn() {
+  brushMode = true;
+  console.log(brushMode);
+}
+
+//toggle paint brush mode off
+function brushOff() {
+  brushMode = false;
+  console.log(brushMode);
+}
+
+//apply color if paint brush mode is on
+function brushColor() {
+  if(brushMode) {
+    applyColor(event.target);
+  }
 }
