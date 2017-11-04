@@ -1,0 +1,27 @@
+.container {
+  margin: 21px;
+  border: 5px solid black;
+}
+
+.application {
+  width: 700px;
+  height: 600px;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: space-around;
+  justify-content: space-around;
+}
+
+.canvas {
+  width: 70%;
+}
+
+.palet {
+  width: 15%;
+}
+
+.indicator {
+  width: 10%;
+  padding-bottom: 10%;
+  background-color: black;
+}
