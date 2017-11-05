@@ -29,13 +29,13 @@ body {
   position: absolute;
   margin-top: 275px;
   margin-left: 22.5px;
+  padding: 7px;
   width: 195px;
   background-color: gainsboro;
 }
 
 .paletOption {
-  margin: 15px;
-  margin-top: 200px;
+  margin: 180px 15px 0;
   width: 100%;
 }
 

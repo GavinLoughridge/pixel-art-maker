@@ -40,7 +40,7 @@ optionsToggle.addEventListener('click', toggleOptions);
 
 //fill the grid with pixles
 for(let i = 0; i < gridRows * gridCols; i++) {
-  canvas.appendChild(makePixle('white', i));
+  canvas.appendChild(makePixle('#FFFFFF', i));
 }
 
 //make and return a single pixle of a given start color
@@ -215,11 +215,6 @@ function applyCanvasArray(canvas) {
 //create file option element
 function populateFileSelector() {
   loadName.innerHTML = '<option disabled selected>Select file...</option>';
-
-  // let oldOptions = loadName.childNodes;
-  // while(oldOptions.length > 0) {
-  //   oldOptions[0].remove();
-  // }
 
   let files = Object.keys(localStorage);
   files.sort();
