@@ -5,7 +5,7 @@
 let selectedColor = 'black';
 
 //set available colors in palet
-let paletColors = ['black','white','green','blue','red','yellow'];
+let paletColors = ['#001F3F','#0074D9','#7FDBFF','#39CCCC','#3D9970','#2ECC40','#01FF70','#FFDC00','#FF851B','#FF4136','#85144b','#F012BE','#B10DC9','#000000','#AAAAAA','#FFFFFF'];
 
 //set number of rows and columns in canvas
 let gridRows = 10;
@@ -23,14 +23,16 @@ colorInput.addEventListener('input', setColorInput);
 saveButton.addEventListener('click', saveCanvas);
 loadButton.addEventListener('click', loadCanvas);
 
-//create list of saved canvases
-let files = Object.keys(localStorage);
-fileList.innerText = files;
+//create list of saved canvases and add to dropdown selector
+populateFileSelector();
 
 //set default state for tool type
 let fillTool = false;
 brushButton.addEventListener('click', setToolBrush);
 fillButton.addEventListener('click', setToolFill);
+
+//set up listener for file options toggle
+optionsToggle.addEventListener('click', toggleOptions);
 
 /*
   create canvas
@@ -49,11 +51,11 @@ function makePixle(color, index) {
   let pixle = document.createElement('div');
   pixle.className = 'pixle';
   pixle.id = 'r' + row + 'c' + col;
-  pixle.style.width = 'calc((100% / ' + gridRows + ') - 2px)';
-  pixle.style.paddingBottom = 'calc((100% / ' + gridRows + ') - 2px)';
+  pixle.style.width = 'calc((100% / ' + gridCols + ')';
+  pixle.style.paddingBottom = 'calc((100% / ' + gridCols + ') - 2px)';
   pixle.style.float = 'left';
   pixle.style.backgroundColor = color;
-  pixle.style.border = '1px solid grey';
+  pixle.style.border = '1px solid lightgrey';
   pixle.addEventListener('click', applyColor);
   pixle.addEventListener('mousedown', brushOn);
   pixle.addEventListener('mouseenter', brushColor);
@@ -66,18 +68,20 @@ function makePixle(color, index) {
 
 //fill the palet with color selectors
 for(let i = 0; i < paletColors.length; i++) {
-  palet.appendChild(makePaletColor(paletColors[i]));
+  palet.insertBefore(makePaletColor(paletColors[i]), palet.childNodes[palet.childNodes.length - 2]);
 }
 
 //make and return a single color selector
 function makePaletColor(color) {
   let paletColor = document.createElement('div');
-  paletColor.style.width = 'calc(50% - 2px)';
-  paletColor.style.paddingBottom = 'calc(50% - 2px)';
+  paletColor.className = 'waves-effect waves-light';
+  paletColor.style.width = 'calc(25% - 4px)';
+  paletColor.style.paddingBottom = 'calc(25% - 8px)';
   paletColor.style.float = 'left';
   paletColor.style.backgroundColor = color;
-  paletColor.style.border = '1px solid grey';
+  paletColor.style.border = '2px solid darkslategrey';
   paletColor.style.borderRadius = '50%';
+  paletColor.style.margin = '2px';
   paletColor.addEventListener('click', setColor);
   return paletColor;
 }
@@ -102,38 +106,45 @@ function colorPixle(pixle) {
 
 //apply the selected color to a fill area
 function colorFill(origin) {
-  let matchColor = origin.style.backgroundColor;
-  let pixleList = [];
-  let limit = 10;
-  pixleList.push(origin);
-  for(let i = 0; pixleList.length > 0; i++) {
-    // if(i > limit) {
-    //   console.log("infinite loop");
-    //   break;
-    // }
-    let row = parseInt(pixleList[0].id.slice(1, pixleList[0].id.indexOf('c')));
-    let col = parseInt(pixleList[0].id.slice(pixleList[0].id.indexOf('c') + 1));
-    pixleList[0].style.backgroundColor = selectedColor;
+  if(origin.style.backgroundColor != selectedColor) {
+    let matchColor = origin.style.backgroundColor.toString();
+    let pixleList = [];
 
-    let top = document.getElementById('r' + (row - 1) + 'c' + col);
-    let bottom = document.getElementById('r' + (row + 1) + 'c' + col);
-    let left = document.getElementById('r' + row + 'c' + (col - 1));
-    let right = document.getElementById('r' + row + 'c' + (col + 1));
+    colorPixle(origin);
+    pixleList.push(origin);
 
-    if((row - 1) >= 0 && top.style.backgroundColor === matchColor && top.style.backgroundColor != selectedColor) {
-      pixleList.push(top);
+    while(pixleList.length > 0) {
+
+      let row = parseInt(pixleList[0].id.slice(1, pixleList[0].id.indexOf('c')));
+      let col = parseInt(pixleList[0].id.slice(pixleList[0].id.indexOf('c') + 1));
+
+      let top = document.getElementById('r' + (row - 1) + 'c' + col);
+      let bottom = document.getElementById('r' + (row + 1) + 'c' + col);
+      let left = document.getElementById('r' + row + 'c' + (col - 1));
+      let right = document.getElementById('r' + row + 'c' + (col + 1));
+
+      if((row - 1) >= 0 && top.style.backgroundColor === matchColor) {
+        colorPixle(top);
+        pixleList.push(top);
+      }
+
+      if((row + 1) < gridRows && bottom.style.backgroundColor === matchColor) {
+        colorPixle(bottom);
+        pixleList.push(bottom);
+      }
+
+      if((col - 1) >= 0 && left.style.backgroundColor === matchColor) {
+        colorPixle(left);
+        pixleList.push(left);
+      }
+
+      if((col + 1) < gridCols && right.style.backgroundColor === matchColor) {
+        colorPixle(right);
+        pixleList.push(right);
+      }
+
+      pixleList.shift();
     }
-    if((row + 1) < gridRows && bottom.style.backgroundColor === matchColor && bottom.style.backgroundColor != selectedColor) {
-      pixleList.push(bottom);
-    }
-    if((col - 1) >= 0 && left.style.backgroundColor === matchColor && left.style.backgroundColor != selectedColor) {
-      pixleList.push(left);
-    }
-    if((col + 1) < gridCols && right.style.backgroundColor === matchColor && right.style.backgroundColor != selectedColor) {
-      pixleList.push(right);
-    }
-    console.log("list is", pixleList);
-    pixleList.shift();
   }
 }
 
@@ -153,7 +164,7 @@ function setColorInput() {
 //toggle paint brush mode on
 function brushOn() {
   brushMode = true;
-  applyColor(event.target)
+  applyColor(event.target);
 }
 
 //toggle paint brush mode off
@@ -172,6 +183,8 @@ function brushColor() {
 function saveCanvas() {
   let canvas = JSON.stringify(setCanvasArray());
   localStorage.setItem(saveName.value, canvas);
+  populateFileSelector();
+  saveName.value = '';
 }
 
 //get array of pixle colors
@@ -199,10 +212,45 @@ function applyCanvasArray(canvas) {
   }
 }
 
+//create file option element
+function populateFileSelector() {
+  loadName.innerHTML = '<option disabled selected>Select file...</option>';
+
+  // let oldOptions = loadName.childNodes;
+  // while(oldOptions.length > 0) {
+  //   oldOptions[0].remove();
+  // }
+
+  let files = Object.keys(localStorage);
+  files.sort();
+
+  for(let i = 0; i < files.length; i++) {
+    let fileOption = document.createElement('option');
+    fileOption.value = files[i];
+    fileOption.innerText = files[i];
+    loadName.appendChild(fileOption);
+  }
+
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+}
+
 function setToolBrush() {
   fillTool = false;
+  indicator.innerHTML = "<img src='assets/brush.ico' alt='brush'>";
 }
 
 function setToolFill() {
   fillTool = true;
+  indicator.innerHTML = "<img src='assets/fill.ico' alt='fill'>";
+}
+
+function toggleOptions() {
+  console.log('toggle from', options.style);
+  if(options.style.display === 'inline') {
+    options.style.display = 'none';
+  } else {
+    options.style.display = 'inline';
+  }
 }

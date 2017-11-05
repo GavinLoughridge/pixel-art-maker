@@ -1,0 +1,10 @@
+.box {
+  padding-bottom: 100%;
+  margin: 21px 0;
+}
+
+@media (max-width: 601px) {
+  .major {
+    margin-top: 0;
+  }
+}
