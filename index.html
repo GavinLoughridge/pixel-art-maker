@@ -10,8 +10,23 @@
   <body>
     <div class='container application'>
       <div id='canvas' class='container canvas'></div>
-      <div id='palet' class='container palet'></div>
+      <div id='palet' class='container palet'>
+        <div class='paletOption'>
+          <input id='colorInput' type='color'>
+        </div>
+      </div>
+      <div class='container tools'>
+        <button id='brushButton' type='button'>Brush</button>
+        <button id='fillButton' type='button'>Fill</button>
+      </div>
       <div id='indicator' class='container indicator'></div>
+      <div class='container files'>
+        <input id='saveName' type='text' name='saveName'></input>
+        <button id='saveButton' type='button'>Save</button>
+        <input id='loadName' type='text' name='loadName'></input>
+        <button id='loadButton' type='button'>Load</button>
+        <div id=fileList></div>
+      </div.
     </div>
   </body>
 </html>
