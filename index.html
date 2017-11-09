@@ -6,37 +6,25 @@
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import Google Press Start 2P Font-->
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-    <link rel="stylesheet" href="index.css">
+    <!--Import index.css-->
+    <link rel="stylesheet" href="css/index.css">
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
 
   <body>
+    <div class='container banner'>
+      <h3>PIXELPALOOZA<h3>
+    </div>
+
     <div class='container application'>
 
-      <button id='optionsToggle' type='button' class='waves-effect waves-light btn optionsToggle'><i class="material-icons left">folder</i>files</button>
-
-      <div id='canvas' class='container canvas'></div>
-
-      <div id='palet' class='container palet'>
-
-        <div class='paletOption'>
-          <label for='colorInput'>CUSTOM:</label>
-          <input id='colorInput' class='colorInput' type='color'>
-        </div>
-
-      </div>
-
-      <div class='container tools'>
-        <button id='brushButton' type='button' class='waves-effect waves-light btn'><img src='assets/brush.ico' alt='brush'></button>
-
-        <button id='fillButton' type='button' class='waves-effect waves-light btn'><img src='assets/fill.ico' alt='fill'></button>
-      </div>
-
-      <div id='indicator' class='container indicator'><img src='assets/brush.ico' alt='brush'></div>
+      <button id='optionsToggle' type='button' class='waves-effect waves-light btn optionsToggle'><i class="material-icons left">menu</i>menu</button>
 
       <div id='options' class='container options'>
         <div class='row'>
@@ -48,13 +36,42 @@
           </select>
           <button id='loadButton' type='button' class='waves-effect waves-light btn'>Load</button>
         </div>
+        <div class='row'>
+          <select id='gridSize' class='col m8'>
+            <option disabled selected>Select grid size...</option>
+            <option value='small'>Small</option>
+            <option value='medium'>Medium</option>
+            <option value='large'>Large</option>
+          </select>
+          <button id='gridButton' type='button' class='waves-effect waves-light btn'>Apply</button>
+        </div>
       </div>
+
+      <button id='undoButton' type='button' class='waves-effect waves-light btn undoButton'><i class="material-icons left">undo</i>undo</button>
+
+      <div id='indicator' class='container indicator'><img src='assets/brush.ico' alt='brush'></div>
+
+      <div class='container tools'>
+        <button id='brushButton' type='button' class='waves-effect waves-light btn'><img src='assets/brush.ico' alt='brush'></button>
+
+        <button id='fillButton' type='button' class='waves-effect waves-light btn'><img src='assets/fill.ico' alt='fill'></button>
+      </div>
+
+      <div id='palet' class='container palet'>
+        <div class='paletOption'>
+          <label for='colorInput'>CUSTOM:</label>
+          <input id='colorInput' class='colorInput' type='color'>
+        </div>
+      </div>
+
+      <div id='canvas' class='container canvas'></div>
 
     </div>
 
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script defer src="index.js"></script>
+    <!--Import javascript file-->
+    <script defer src="js/index.js"></script>
   </body>
 </html>
