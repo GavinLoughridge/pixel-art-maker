@@ -4,6 +4,13 @@
 /*
   declare variables
 */
+let gridRows = 10;
+let gridCols = 10;
+let selectedColor = '#000000';
+let brushMode = false;
+let fillTool = false;
+let undoChanging = false;
+const paletColors = ['#001F3F', '#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#01FF70', '#FFDC00', '#FF851B', '#FF4136', '#85144b', '#F012BE', '#B10DC9', '#000000', '#AAAAAA', '#FFFFFF'];
 
 const canvas = document.getElementById('canvas');
 const palet = document.getElementById('palet');
@@ -16,24 +23,14 @@ const saveName = document.getElementById('saveName');
 const undoButton = document.getElementById('undoButton');
 const loadButton = document.getElementById('loadButton');
 const loadName = document.getElementById('loadName');
-const optionsToggle = document.getElementById('optionsToggle');
 const options = document.getElementById('options');
 const gridButton = document.getElementById('gridButton');
 const gridSize = document.getElementById('gridSize');
 
-const paletColors = ['#001F3F', '#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#01FF70', '#FFDC00', '#FF851B', '#FF4136', '#85144b', '#F012BE', '#B10DC9', '#000000', '#AAAAAA', '#FFFFFF'];
-
-let gridRows = 10;
-let gridCols = 10;
-let selectedColor = '#000000';
-let brushMode = false;
-let fillTool = false;
-let undoChanging = false;
-
 /*
   change color of a single pixel
 */
-function colorPixle(pixel) {
+function colorPixel(pixel) {
   pixel.style.backgroundColor = selectedColor;
 }
 
@@ -53,14 +50,14 @@ function setToolFill() {
 function colorFill(origin) {
   if (origin.style.backgroundColor !== selectedColor) {
     const matchColor = origin.style.backgroundColor.toString();
-    const pixleList = [];
+    const pixelList = [];
 
-    colorPixle(origin);
-    pixleList.push(origin);
+    colorPixel(origin);
+    pixelList.push(origin);
 
-    while (pixleList.length > 0) {
-      const row = parseInt(pixleList[0].id.slice(1, pixleList[0].id.indexOf('c')), 10);
-      const col = parseInt(pixleList[0].id.slice(pixleList[0].id.indexOf('c') + 1), 10);
+    while (pixelList.length > 0) {
+      const row = parseInt(pixelList[0].id.slice(1, pixelList[0].id.indexOf('c')), 10);
+      const col = parseInt(pixelList[0].id.slice(pixelList[0].id.indexOf('c') + 1), 10);
 
       const top = document.getElementById(`r${row - 1}c${col}`);
       const bottom = document.getElementById(`r${row + 1}c${col}`);
@@ -68,26 +65,26 @@ function colorFill(origin) {
       const right = document.getElementById(`r${row}c${col + 1}`);
 
       if ((row - 1) >= 0 && top.style.backgroundColor === matchColor) {
-        colorPixle(top);
-        pixleList.push(top);
+        colorPixel(top);
+        pixelList.push(top);
       }
 
       if ((row + 1) < gridRows && bottom.style.backgroundColor === matchColor) {
-        colorPixle(bottom);
-        pixleList.push(bottom);
+        colorPixel(bottom);
+        pixelList.push(bottom);
       }
 
       if ((col - 1) >= 0 && left.style.backgroundColor === matchColor) {
-        colorPixle(left);
-        pixleList.push(left);
+        colorPixel(left);
+        pixelList.push(left);
       }
 
       if ((col + 1) < gridCols && right.style.backgroundColor === matchColor) {
-        colorPixle(right);
-        pixleList.push(right);
+        colorPixel(right);
+        pixelList.push(right);
       }
 
-      pixleList.shift();
+      pixelList.shift();
     }
   }
 }
@@ -96,7 +93,7 @@ function applyColor() {
   if (fillTool) {
     colorFill(event.target);
   } else {
-    colorPixle(event.target);
+    colorPixel(event.target);
   }
 }
 
@@ -165,25 +162,25 @@ populatePalet();
 /*
   populate the canvas
 */
-function makePixle(color, index) {
+function makePixel(color, index) {
   const row = Math.floor(index / gridRows);
   const col = index % gridRows;
 
-  const pixle = document.createElement('div');
-  pixle.className = 'pixle';
-  pixle.id = `r${row}c${col}`;
-  pixle.style.width = `calc((100% / ${gridCols})`;
-  pixle.style.paddingBottom = `calc((100% / ${gridCols}) - 2px)`;
-  pixle.style.float = 'left';
-  pixle.style.backgroundColor = color;
-  pixle.style.border = '1px solid lightgrey';
-  pixle.addEventListener('mouseenter', brushColor);
-  return pixle;
+  const pixel = document.createElement('div');
+  pixel.className = 'pixel';
+  pixel.id = `r${row}c${col}`;
+  pixel.style.width = `calc((100% / ${gridCols})`;
+  pixel.style.paddingBottom = `calc((100% / ${gridCols}) - 2px)`;
+  pixel.style.float = 'left';
+  pixel.style.backgroundColor = color;
+  pixel.style.border = '1px solid lightgrey';
+  pixel.addEventListener('mouseenter', brushColor);
+  return pixel;
 }
 
 function populateCanvas(rows, cols) {
   for (let i = 0; i < rows * cols; i += 1) {
-    canvas.appendChild(makePixle('#FFFFFF', i));
+    canvas.appendChild(makePixel('#FFFFFF', i));
   }
 }
 
@@ -217,10 +214,10 @@ populateFileSelector();
   save a file
 */
 function setCanvasArray() {
-  const pixles = document.getElementsByClassName('pixle');
+  const pixels = document.getElementsByClassName('pixel');
   const canvasArray = [];
-  for (let i = 0; i < pixles.length; i += 1) {
-    canvasArray[i] = pixles[i].style.backgroundColor;
+  for (let i = 0; i < pixels.length; i += 1) {
+    canvasArray[i] = pixels[i].style.backgroundColor;
   }
   return canvasArray;
 }
@@ -250,9 +247,16 @@ function saveCanvas(fileName) {
   load a file
 */
 function applyCanvasArray(canvasArray) {
-  const pixles = document.getElementsByClassName('pixle');
+  const pixels = document.getElementsByClassName('pixel');
+
+  gridRows = Math.sqrt(canvasArray.length);
+  gridCols = gridRows;
+
+  canvas.innerHTML = '';
+  populateCanvas(gridRows, gridCols);
+
   for (let i = 0; i < canvasArray.length; i += 1) {
-    pixles[i].style.backgroundColor = canvasArray[i];
+    pixels[i].style.backgroundColor = canvasArray[i];
   }
 }
 
@@ -267,15 +271,13 @@ function loadCanvas(fileName) {
 
   const canvasString = localStorage.getItem(name);
   applyCanvasArray(JSON.parse(canvasString));
+  saveCanvas('Z660o8DSqY-current');
 }
 
 
 /*
   undo of last action
 */
-saveCanvas('Z660o8DSqY-current');
-undoButton.style.display = 'none';
-
 function undoRecord() {
   undoChanging = true;
 }
@@ -298,10 +300,11 @@ function undoLoad() {
   create menu options
 */
 function toggleOptions() {
-  if (options.style.display === 'inline') {
-    options.style.display = 'none';
-  } else {
+  const eventId = event.target.id;
+  if (eventId === 'optionsToggle' && options.style.display !== 'inline') {
     options.style.display = 'inline';
+  } else if (!options.contains(event.target) || eventId === 'saveButton' || eventId === 'loadButton' || eventId === 'gridButton') {
+    options.style.display = 'none';
   }
 }
 
@@ -310,7 +313,7 @@ function toggleOptions() {
 */
 function applyGridSize() {
   switch (gridSize.value) {
-    case 'small':
+    case 'large':
       canvas.innerHTML = '';
       gridRows = 50;
       gridCols = 50;
@@ -333,7 +336,7 @@ function applyGridSize() {
 /*
   set event listeners
 */
-optionsToggle.addEventListener('click', toggleOptions);
+window.addEventListener('click', toggleOptions);
 gridButton.addEventListener('click', applyGridSize);
 canvas.addEventListener('mousedown', undoRecord);
 window.addEventListener('mouseup', undoSave);
@@ -348,3 +351,5 @@ colorInput.addEventListener('input', setColorInput);
 canvas.addEventListener('click', applyColor);
 
 populateCanvas(gridRows, gridCols);
+saveCanvas('Z660o8DSqY-current');
+undoButton.style.display = 'none';
