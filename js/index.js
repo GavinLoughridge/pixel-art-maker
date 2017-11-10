@@ -32,7 +32,7 @@ const gridSize = document.getElementById('gridSize');
 */
 function colorPixel(pixel) {
   if (selectedColor === 'rainbow') {
-    pixel.style.backgroundColor = paletColors[Math.floor(Math.random() * (paletColors.length - 2))];
+    pixel.style.backgroundColor = paletColors[Math.floor(Math.random() * (paletColors.length - 5))];
   } else {
     pixel.style.backgroundColor = selectedColor;
   }
@@ -127,7 +127,7 @@ function setColor() {
     selectedColor = 'rainbow';
     $('#indicator').toggleClass('rainbow');
   } else if ($('#indicator').hasClass('rainbow') && !$(event.target).hasClass('rainbow')) {
-    !$('#indicator').toggleClass('rainbow');
+    $('#indicator').toggleClass('rainbow');
     selectedColor = event.target.style.backgroundColor;
     indicator.style.backgroundColor = selectedColor;
   } else if (!$(event.target).hasClass('rainbow')) {
@@ -140,6 +140,9 @@ function setColor() {
   select a color from the color input element
 */
 function setColorInput() {
+  if ($('#indicator').hasClass('rainbow')) {
+    $('#indicator').toggleClass('rainbow');
+  }
   selectedColor = event.target.value;
   indicator.style.backgroundColor = selectedColor;
 }
