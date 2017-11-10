@@ -1,28 +1,29 @@
 body {
-  background-color: #02111B;
+  background-color: papayawhip;
 }
 
 .container {
   margin: 21px;
-  border: 5px solid #30292F;
+  border: 5px solid #FC4A1A;
   border-radius: 10px;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, .1);
 }
 
 .banner {
   margin: 21px auto;
-  width: 600px;
+  width: 400px;
   font-size: 50px;
   font-family: 'Press Start 2P', cursive;
-  background-color: #3F4045;
+  background-color: #4ABDAC;
   text-align: center;
+  color: darkslategrey;
 }
 
 .application {
   margin: 0 auto;
   width: 800px;
   height: 600px;
-  background-color: #3F4045;
+  background-color: #4ABDAC;
 }
 
 .indicator {
@@ -47,7 +48,7 @@ body {
   margin-left: 22.5px;
   width: 195px;
   height: 55px;
-  background-color: #FCFCFC;
+  background-color: #F7B733;
 }
 
 .palet {
@@ -56,7 +57,7 @@ body {
   margin-left: 22.5px;
   padding: 7px;
   width: 195px;
-  background-color: #FCFCFC;
+  background-color: #F7B733;
 }
 
 .paletOption {
@@ -65,12 +66,11 @@ body {
 }
 
 .paletOption label {
-  color: #30292F;
+  color: darkslategrey;
   font-size: 25px;
 }
 
 .colorInput {
-  border: 2px solid darkslategrey;
   width: 38.25px;
   height: 38.25px;
 }
@@ -89,23 +89,23 @@ body {
   height: 36px;
   margin: 4px 5px;
   padding: 0 5px;
-  background-color: #28587B;
+  background-color: #FC4A1A;
 }
 
 .btn:hover {
-  background-color: #28587B;
+  background-color: #FC4A1A;
 }
 
 .btn:visited {
-  background-color: #28587B;
+  background-color: #FC4A1A;
 }
 
 .btn:active {
-  background-color: #28587B;
+  background-color: #FC4A1A;
 }
 
 .btn:focus {
-  background-color: #28587B;
+  background-color: #FC4A1A;
 }
 
 .options {
@@ -131,4 +131,8 @@ body {
   position: absolute;
   width: 90px;
   margin-left: 100px;
+}
+
+.rainbow {
+  background: linear-gradient(to right, red, orange, yellow, green, blue, violet);
 }

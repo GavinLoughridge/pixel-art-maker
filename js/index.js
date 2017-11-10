@@ -6,11 +6,11 @@
 */
 let gridRows = 10;
 let gridCols = 10;
-let selectedColor = '#000000';
+let selectedColor = 'rgb(0, 0, 0)';
 let brushMode = false;
 let fillTool = false;
 let undoChanging = false;
-const paletColors = ['#001F3F', '#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#01FF70', '#FFDC00', '#FF851B', '#FF4136', '#85144b', '#F012BE', '#B10DC9', '#000000', '#AAAAAA', '#FFFFFF'];
+const paletColors = ['#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#01FF70', '#FFDC00', '#FF851B', '#FF4136', '#85144b', '#F012BE', '#B10DC9', '#000000', '#AAAAAA', '#FFFFFF', 'rainbow'];
 
 const canvas = document.getElementById('canvas');
 const palet = document.getElementById('palet');
@@ -31,7 +31,11 @@ const gridSize = document.getElementById('gridSize');
   change color of a single pixel
 */
 function colorPixel(pixel) {
-  pixel.style.backgroundColor = selectedColor;
+  if (selectedColor === 'rainbow') {
+    pixel.style.backgroundColor = paletColors[Math.floor(Math.random() * (paletColors.length - 2))];
+  } else {
+    pixel.style.backgroundColor = selectedColor;
+  }
 }
 
 /*
@@ -119,8 +123,17 @@ function brushColor() {
   select a color from the palet
 */
 function setColor() {
-  selectedColor = event.target.style.backgroundColor;
-  indicator.style.backgroundColor = selectedColor;
+  if ($(event.target).hasClass('rainbow') && !$('#indicator').hasClass('rainbow')) {
+    selectedColor = 'rainbow';
+    $('#indicator').toggleClass('rainbow');
+  } else if ($('#indicator').hasClass('rainbow') && !$(event.target).hasClass('rainbow')) {
+    !$('#indicator').toggleClass('rainbow');
+    selectedColor = event.target.style.backgroundColor;
+    indicator.style.backgroundColor = selectedColor;
+  } else if (!$(event.target).hasClass('rainbow')) {
+    selectedColor = event.target.style.backgroundColor;
+    indicator.style.backgroundColor = selectedColor;
+  }
 }
 
 /*
@@ -140,7 +153,12 @@ function makePaletColor(color) {
   paletColor.style.width = 'calc(25% - 4px)';
   paletColor.style.paddingBottom = 'calc(25% - 8px)';
   paletColor.style.float = 'left';
-  paletColor.style.backgroundColor = color;
+  if (color !== 'rainbow') {
+    paletColor.className = 'waves-effect waves-light';
+    paletColor.style.backgroundColor = color;
+  } else {
+    paletColor.className = 'waves-effect waves-light rainbow';
+  }
   paletColor.style.border = '2px solid darkslategrey';
   paletColor.style.borderRadius = '50%';
   paletColor.style.margin = '2px';
@@ -318,37 +336,43 @@ function applyGridSize() {
       gridRows = 50;
       gridCols = 50;
       populateCanvas(gridRows, gridCols);
+      saveCanvas('Z660o8DSqY-current');
       break;
     case 'medium':
       canvas.innerHTML = '';
       gridRows = 20;
       gridCols = 20;
       populateCanvas(gridRows, gridCols);
+      saveCanvas('Z660o8DSqY-current');
       break;
     default:
       canvas.innerHTML = '';
       gridRows = 10;
       gridCols = 10;
       populateCanvas(gridRows, gridCols);
+      saveCanvas('Z660o8DSqY-current');
   }
 }
 
 /*
   set event listeners
 */
+
 window.addEventListener('click', toggleOptions);
 gridButton.addEventListener('click', applyGridSize);
-canvas.addEventListener('mousedown', undoRecord);
-window.addEventListener('mouseup', undoSave);
-undoButton.addEventListener('click', undoLoad);
 saveButton.addEventListener('click', saveCanvas);
 loadButton.addEventListener('click', loadCanvas);
-brushButton.addEventListener('click', setToolBrush);
-fillButton.addEventListener('click', setToolFill);
+
+undoButton.addEventListener('click', undoLoad);
+canvas.addEventListener('mousedown', undoRecord);
+window.addEventListener('mouseup', undoSave);
+
 canvas.addEventListener('mousedown', brushOn);
 window.addEventListener('mouseup', brushOff);
+
+brushButton.addEventListener('click', setToolBrush);
+fillButton.addEventListener('click', setToolFill);
 colorInput.addEventListener('input', setColorInput);
-canvas.addEventListener('click', applyColor);
 
 populateCanvas(gridRows, gridCols);
 saveCanvas('Z660o8DSqY-current');
