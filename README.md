@@ -1,4 +1,8 @@
-# Pixel Art Maker
+# Pixel-Palooza
+
+This is my first web app, created over the course of a week during my first month of learning web development. You can read the full assignment below. I decided to add a few additional features such as a 'rainbow' colored brush and an undo button (though right now it only works for a single step).
+
+# Original Assignment
 
 In this exercise, you'll create your own pixel art maker which will allow a user to choose colors from a palette and then paint pixel art. The interface is completely up to you, but it could look something like this.
 
